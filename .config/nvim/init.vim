@@ -1,590 +1,488 @@
-set smarttab          " smart tab
-set title             " nice terminal title
-set splitbelow        " new spilt window below where you are
-set splitright        " new vsplit windows right where you are
-set shiftround        " < and > commands for indention
-set expandtab         " use spaces instead of <Tab>s
-set tabstop=2         " number of spaces that a <Tab> in the file counts for
-set shiftwidth=2      " number of spaces to use for each step of (auto)indent
-set softtabstop=2     " spaces feel like tabs
-set smartindent       " auto tabs when going to next line
-set modeline
-"set hlsearch          " Highlight search results
-set incsearch
-set autoindent        " always set auto-indenting on
-set copyindent        " copy the previous indentation on auto-indenting
-set ruler             " line and column number
-set backspace=indent,eol,start
-set encoding=utf-8
-set confirm           " asks confirmation when read-only etc
-set scrolloff=3       " keep 3 lines when scrolling
-set sidescrolloff=2   " keep 2 characters when scrolling
-set showmatch         " jumps to next bracket
-set history=1000
-set nobackup          " No swaps or backups
-set noswapfile
-
-" set mouse=            " disable evil mouse
-set mousemodel=popup
-" Disable mouse selection entering the Visual mode
-" But I need mouse=a for scolling to work in tmux
-set mouse=a
-set number
-"set relativenumber
-syntax on
-filetype off
-
-"NeoBundle Scripts-----------------------------
-if has('vim_starting')
-  set runtimepath+=~/.config/nvim/bundle/neobundle.vim/
-  set runtimepath+=~/.config/nvim/
-endif
-
-
-let neobundle_readme=expand('~/.config/nvim/bundle/neobundle.vim/README.md')
-
-if !filereadable(neobundle_readme)
-  echo "Installing NeoBundle..."
-  echo ""
-  silent !mkdir -p ~/.config/nvim/bundle
-  silent !git clone https://github.com/Shougo/neobundle.vim ~/.config/nvim/bundle/neobundle.vim/
-  let g:not_finsh_neobundle = "yes"
-endif
-
-
-" Required:
-call neobundle#begin(expand('$HOME/.config/nvim/bundle'))
-
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" List and open files
-" NeoBundle 'scrooloose/nerdtree'
-" NeoBundle 'jeetsukumaran/vim-filebeagle'
-
-" Gstatus, Gmove and other git commands
-NeoBundle 'tpope/vim-fugitive'
-
-" Comment out lines
-NeoBundle 'tpope/vim-commentary'
-
-" Be cool and highlight text
-" NeoBundle 'junegunn/limelight.vim'
-
-" Search for files
-NeoBundle 'ctrlpvim/ctrlp.vim'
-
-" Color schemes
-NeoBundle 'flazz/vim-colorschemes'
-NeoBundle 'vim-scripts/ScrollColors'
-" NeoBundle 'tomasr/molokai'
-" NeoBundle 'gosukiwi/vim-atom-dark'
-" Enable ansi escape seq colors
-NeoBundle 'vim-scripts/AnsiEsc.vim'
-NeoBundle 'vim-scripts/CSApprox' " Needed by git blame
-
-" Bling and stuff. Different status bar things like file path, line number,
-" visible mode status, buffers etc
-" NeoBundle 'vim-airline/vim-airline-themes'
-
-" Shows git diff left of the line numbers
-NeoBundle 'airblade/vim-gitgutter'
-
-" Different language packs
-NeoBundle 'sheerun/vim-polyglot'
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'tpope/vim-rails'
-NeoBundle 'tpope/vim-rake'
-NeoBundle 'tpope/vim-bundler'
-NeoBundle 'gaogao1030/vim-skim', { 'autoload' : { 'filename_patterns' :[ "\.skim$"], }, }
-
-" Use leader-b to make ruby do-end to {} and one liner if possible
-NeoBundle 'jgdavey/vim-blockle'
-
-" use cs'" to change surrounding ' to ". Can take any other combinations as
-" well like cs'<q>, etc
-NeoBundle 'tpope/vim-surround'
-
-" Autocomplete!
-NeoBundle 'Valloric/YouCompleteMe', {
-     \ 'build'      : {
-        \ 'mac'     : './install.sh --clang-completer --system-libclang --omnisharp-completer',
-        \ 'unix'    : './install.sh --clang-completer --system-libclang --omnisharp-completer',
-        \ 'windows' : './install.sh --clang-completer --system-libclang --omnisharp-completer',
-        \ 'cygwin'  : './install.sh --clang-completer --system-libclang --omnisharp-completer'
-        \ }
-     \ }
-
-" gS to split condition statements, gJ to join them
-NeoBundle 'AndrewRadev/splitjoin.vim'
-
-" Sublime select file. ctrl+n to select, ctrl+x to skip, ctrl+p to go back
-NeoBundle 'terryma/vim-multiple-cursors'
-
-" Use AG
-NeoBundle 'rking/ag.vim'
-
-" Camelcase for moving in camelcase code
-NeoBundle 'bkad/CamelCaseMotion'
-
-" Test plugin
-NeoBundle 'janko-m/vim-test'
-
-" c-tags
-NeoBundle 'ludovicchabant/vim-gutentags'
-
-" Required:
-call neobundle#end()
-filetype plugin indent on
-
-" If there are uninstalled bundles found on startup,
-" this will conveniently prompt you to install them.
-NeoBundleCheck
-"End NeoBundle Scripts-------------------------
-
-"*****************************************************************************
-"" CONFIGURATIONS
-"*****************************************************************************
-"# Nerdtree
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" nmap ,m :NERDTreeFind<CR>
-" nmap ,n :NERDTreeToggle<CR>
-
-" Filebeagle
-" let g:filebeagle_suppress_keymaps = 1
-" map <silent> - <Plug>FileBeagleOpenCurrentBufferDir
-
-
-" Some color scheme stuff
-if !exists('g:not_finsh_neobundle')
-  colorscheme holokai
-endif
-set t_Co=256
-set nocursorline
-set guioptions=egmrti
-set gfn=Monospace\ 10
-
-if exists("*gutentags#statusline")
-  set statusline+=%{gutentags#statusline()}
-endif
-
-if has("gui_running")
-  if has("gui_mac") || has("gui_macvim")
-    set guifont=Menlo:h12
-    set transparency=7
-  endif
-else
-  let g:CSApprox_loaded = 1
-
-  if $COLORTERM == 'gnome-terminal'
-    set term=gnome-256color
-  else
-    if $TERM == 'xterm'
-      set term=xterm-256color
-    endif
-  endif
-endif
-
-if &term =~ '256color'
-  set t_ut=
-endif
-" let g:molokai_original = 1
-
-" vim-airline
-let g:airline_theme = 'powerlineish'
-let g:airline#extensions#syntastic#enabled = 1
-let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
-
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-if !exists('g:airline_powerline_fonts')
-  let g:airline#extensions#tabline#left_sep = ' '
-  let g:airline#extensions#tabline#left_alt_sep = '|'
-else
-  let g:airline#extensions#tabline#left_sep = ''
-  let g:airline#extensions#tabline#left_alt_sep = ''
-
-  " powerline symbols
-  let g:airline_left_sep = ''
-  let g:airline_left_alt_sep = ''
-  let g:airline_right_sep = ''
-  let g:airline_right_alt_sep = ''
-  let g:airline_symbols.branch = ''
-  let g:airline_symbols.readonly = ''
-  let g:airline_symbols.linenr = ''
-endif
-
-
-" syntastic
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
-let g:syntastic_auto_loc_list=1
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_html_tidy_ignore_errors=["proprietary attribute"]
-
-" Disable sounds in mac
-set visualbell
-set t_vb=
-
-set wildmode=list:longest
-set wildignore+=.hg,.git,.svn                    " Version control
-set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
-set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
-set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
-set wildignore+=*.spl                            " compiled spelling word lists
-set wildignore+=*.sw?                            " Vim swap files
-set wildignore+=*.DS_Store                       " OSX bullshit
-set wildignore+=*.luac                           " Lua byte code
-set wildignore+=migrations                       " Django migrations
-set wildignore+=*.pyc                            " Python byte code
-set wildignore+=classes
-set wildignore+=log
-set wildignore+=source_maps                      " Compiled coffeescript/etc
-set wildignore+=bower_components                 " Bower components
-set wildignore+=public                           " Public dir
-set wildignore+=node_modules
-
-set foldlevel=100
-set foldmethod=indent
-set foldlevelstart=99
-set ignorecase
-set smartcase         " case sensitive
-set pastetoggle=<F11>
-set winminheight=0    " minimal window height
-set hidden            " less warning when dealing with buffers
-
-set laststatus=2                " always show status line
-set statusline=                 " build the status line
-set statusline+=%-3.3n\         " buffer number
-set statusline+=%f\             " filename
-set statusline+=%h%m%r%w        " status flags
-set statusline+=%y              " file type
-set statusline+=%=              " right align remainder
-set statusline+=0x%-8B          " character value
-set statusline+=%-14(%l,%c%V%)  " line, character
-set statusline+=%<%P            " file position
-
-let &winwidth = 90
-
-let ruby_operators = 1 " hightlight ruby operators
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-
-" Use ag instead of grep
-"   brew install the_silver_searcher
-set grepprg=ag\ --nogroup\ --nocolor
-" let g:ctrlp_custom_ignore = {
-"   \ 'dir':  'node_modules',
-"   \ }
-
-if executable('ag')
-  let g:ctrlp_root_markers = ['start', 'package.json']
-  let g:ctrlp_user_command = ['ag %s --files-with-matches -g "" --ignore tmp/*']
-  let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](doc|tmp|node_modules)',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ }
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-endif
-
-"*****************************************************************************
-"" Autocmd Rules
-"*****************************************************************************
-" TODO what is this shit here
-"" The PC is fast enough, do syntax highlight syncing from start
-augroup vimrc-sync-fromstart
-  autocmd!
-  autocmd BufEnter * :syntax sync fromstart
-augroup END
-
-"" Remember cursor position
-augroup vimrc-remember-cursor-position
-  autocmd!
-  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-augroup END
-
-"" txt
-augroup vimrc-wrapping
-  autocmd!
-  autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
-augroup END
-
-"" make/cmake
-augroup vimrc-make-cmake
-  autocmd!
-  autocmd FileType make setlocal noexpandtab
-  autocmd BufNewFile,BufRead CMakeLists.txt setlocal filetype=cmake
-augroup END
-
-"" js/coffee/html
-augroup vimrc-js
-  autocmd!
-  autocmd FileType coffee setlocal tabstop=4 softtabstop=2 shiftwidth=2 expandtab
-  autocmd FileType javascript setlocal tabstop=4 softtabstop=2 shiftwidth=2 expandtab
-  autocmd FileType html setlocal tabstop=4 softtabstop=2 shiftwidth=2 expandtab
-augroup END
-
-set autoread
-
-" Show trailing whitespace, but don't highlight the extra whitespace while
-" typing, only after leaving insert
-augroup trailing-whitepsace
-  autocmd!
-  highlight ExtraWhitespace ctermbg=red guibg=red
-  autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-  match ExtraWhitespace /\s\+$/
-  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-augroup END
-
-source $VIMRUNTIME/filetype.vim
-
-augroup file-types
-  autocmd!
-  " FILE TYPES / SYNTAX
-
-  autocmd BufEnter *.html set filetype=xhtml
-  autocmd BufEnter */nginx/*.conf* set filetype=nginx
-  autocmd BufEnter *.html.erb source $HOME/.vim/syntax/html5.vim
-  autocmd BufEnter *.es6 set filetype=javascript
-
-  autocmd BufEnter *.prawn set filetype=ruby
-  autocmd BufEnter Guardfile set filetype=ruby
-  autocmd BufEnter Gemfile set filetype=ruby
-  autocmd BufEnter *.slim set filetype=slim
-augroup END
-
-" For all text files set 'textwidth' to 78 characters.
-" autocmd FileType text setlocal textwidth=78
-
-"*****************************************************************************
-"" Abbreviations
-"*****************************************************************************
-"" no one is really happy until you have this shortcuts
-cnoreabbrev W! w!
-cnoreabbrev Q! q!
-cnoreabbrev Qall! qall!
-cnoreabbrev Wq wq
-cnoreabbrev Wa wa
-cnoreabbrev wQ wq
-cnoreabbrev WQ wq
-cnoreabbrev W w
-cnoreabbrev Q q
-cnoreabbrev Qall qall
-
-"*****************************************************************************
-"" Mappings
-"*****************************************************************************
-let mapleader = "\<space>"
-
-"" Ag
-nnoremap <C-f> :LAg!<SPACE>
-nnoremap <leader>f :LAg! <C-R><C-W>
-vnoremap <leader>f y:<C-u>LAg! "<C-r>0"<space>
-
-let g:ag_lhandler="lopen"
-
-" CtrlP
-let g:ctrlp_map = "<leader>p"
-let g:ctrlp_root_markers = ['start', 'package.json']
-
-" Don't make a # force column zero.
-inoremap # X<BS>#
-
-" Copy/paste from system clipboard
-map <leader>y "+y
-map <leader>p "+p
-
-" Move line(s) of text using Alt+j/k
-"set termencoding=latin1
-nnoremap <silent> <A-j> :m+<CR>==
-nnoremap <silent> <A-k> :m-2<CR>==
-inoremap <silent> <A-j> <Esc>:m+<CR>==gi
-inoremap <silent> <A-k> <Esc>:m-2<CR>==gi
-vnoremap <silent> <A-j> :m'>+<CR>gv=gv
-vnoremap <silent> <A-k> :m-2<CR>gv=gv
-
-"" Vmap for maintain Visual Mode after shifting > and <
-vmap < <gv
-vmap > >gv
-
-"" Split
-noremap <Leader>o :<C-u>split<CR>
-noremap <Leader>i :<C-u>vsplit<CR>
-
-"make splits open below and to the right
+let os = substitute(system('uname'), "\n", "", "")
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'morhetz/gruvbox'
+Plug 'chusiang/vim-sdcv' " How to install dict see https://askubuntu.com/questions/191125/is-there-an-offline-command-line-dictionary
+Plug 'kassio/neoterm'
+Plug 'janko-m/vim-test'
+Plug 'benekastah/neomake'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neco-syntax'
+Plug 'ujihisa/neco-look', { 'for': ['text', 'note', 'gitcommit', 'markdown'] }
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+Plug 'itchyny/lightline.vim'
+Plug 'shinchu/lightline-gruvbox.vim'
+Plug 'vim-ruby/vim-ruby', { 'for': ['ruby', 'haml', 'eruby'] }
+Plug 'tpope/vim-rake', { 'for': 'ruby' }
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-rails', { 'for': ['ruby', 'eruby', 'haml', 'coffee', 'javascript'] }
+Plug 'tpope/vim-rbenv', { 'for': 'ruby' }
+Plug 'tpope/vim-bundler', { 'for': 'ruby' }
+Plug 'Keithbsmiley/rspec.vim', { 'for': 'ruby' }
+Plug 'thoughtbot/vim-rspec', { 'for': 'ruby' }
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
+Plug 'tpope/vim-haml', { 'for': ['haml'] }
+Plug 'slim-template/vim-slim', { 'for': ['slim'] }
+Plug 'tomtom/tcomment_vim'
+Plug 'nelstrom/vim-textobj-rubyblock', { 'for': ['ruby'] }
+  Plug 'kana/vim-textobj-user', { 'for': ['ruby'] }
+Plug 'thinca/vim-localrc'
+Plug 'jgdavey/vim-blockle'
+Plug 'othree/eregex.vim'
+Plug 'othree/html5.vim'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
+Plug 'Shougo/neco-syntax'
+Plug 'easymotion/vim-easymotion'
+Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'othree/javascript-libraries-syntax.vim', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'kchmck/vim-coffee-script', { 'for': ['coffee', 'haml', 'eruby'] }
+Plug 'mxw/vim-jsx', { 'for': 'javascript.jsx' }
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'ap/vim-css-color'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'rhysd/vim-grammarous'
+Plug 'cespare/vim-toml'
+Plug 'bfredl/nvim-miniyank'
+Plug 'int3/vim-extradite'
+Plug 'dzeban/vim-log-syntax'
+Plug 'stephpy/vim-yaml'
+
+" Other languages
+" Plug 'myint/clang-complete', { 'for': ['c', 'cpp'] }
+Plug 'rhysd/vim-crystal', { 'for': 'crystal' }
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'zchee/deoplete-go', { 'for': 'go', 'do': 'make'}
+" Plug 'vim-scripts/groovy.vim', { 'for': 'groovy' }
+" Plug 'elixir-lang/vim-elixir', { 'for': 'elixir' }
+
+call plug#end()
+
+set termguicolors " true colors
+set exrc " loads project spedific .nvimrc
+
+"-----------------------
+"""""""""""""""""""""""""
+" KEYBINDINGS
+"""""""""""""""""""""""""
+let mapleader=","
+inoremap jj <ESC>
+map <Leader>r "hy:%S/<C-r>h//gc<left><left><left>
+map <Leader>f *
+map <Leader>rr :!ruby %<CR>
+map <Leader>w :w<CR>
+map <Leader>qa :wqa<CR>
+map <Leader>[ :bprevious<CR>
+map <Leader>] :bnext<CR>
+map <Leader>p "+p<CR>
+map <Leader>y "+y<CR>
+map <Leader>D "_dd<CR>
+map <Leader>d "_d<CR>
+map // :TComment<CR>
+map <Leader>r8 :vertical resize 80<CR>
+map <Leader>r12 :vertical resize 130<CR>
+map <F5> :so $MYVIMRC<CR>
+nnoremap <leader>. :Tags <CR>
+nnoremap <Leader>fu :BTags<Cr>
+nnoremap <C-e> :Buffers<CR>
+
+" run set tests
+nmap <silent> <leader>R :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>A :TestSuite<CR>
+nmap <silent> <leader>L :TestLast<CR>
+nmap <silent> <leader>G :TestVisit<CR>
+
+" Explain current word from dictionary
+nmap <silent> <leader>d :call SearchWord()<CR>
+
+" Useful maps
+" closes the all terminal buffers
+nnoremap <Leader>tc :call neoterm#close_all()<cr>
+" clear terminal
+nnoremap <Leader>tl :call neoterm#clear()<cr>
+
+" clear highlight
+map <Leader><Leader>h :set hlsearch!<CR>
+
+" regenerate CTAGS with ripper-tags and coffeetags
+" map <Leader>ct :silent !~/.rvm/gems/ruby-2.4.0/bin/ripper-tags -R --exclude=vendor && coffeetags -R -a -f tags<CR>
+
+map <Leader>ct :silent !ctags -R<CR>
+
+" Devdocs docs
+command! -nargs=? DevDocs :call system('type -p open >/dev/null 2>&1 && open http://devdocs.io/#q=<args> || xdg-open http://devdocs.io/#q=<args>')
+au FileType python,ruby,rspec,javascript,html,php,eruby,coffee,haml nmap <buffer> K :exec "DevDocs " . fnameescape(expand('<cword>'))<CR>
+
+" Grammarous
+let g:grammarous#default_comments_only_filetypes = {
+            \ '*' : 1, 'help' : 0, 'markdown' : 0,
+            \ }
+
+" Edit another file in the same directory as the current file
+" uses expression to extract path from current file's path
+map <Leader>e :e <C-R>=escape(expand("%:p:h"),' ') . '/'<CR>
+map <Leader>s :split <C-R>=escape(expand("%:p:h"), ' ') . '/'<CR>
+map <Leader>v :vnew <C-R>=escape(expand("%:p:h"), ' ') . '/'<CR>
+
+" EasyMotion
+nmap s <Plug>(easymotion-s2)
+nmap t <Plug>(easymotion-t2)
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+
+" Rubocop fix current file
+nmap <leader>rc :call RubocopAutoFix()<CR>
+
+" Easy align
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ea <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ea <Plug>(EasyAlign)
+
+command! Q q " Bind :Q to :q
+command! Qall qall
+command! W w
+nnoremap <C-t> :FZF<cr>
+nmap <F7> :setlocal spell! spell?<CR>
+" Toggle relative numbers
+map <Leader>n :call NumberToggle()<CR>
+" Toggle dark/ligh colortheme
+map <Leader>c :call ColorToggle()<CR>
+
+" Open Neomake warning/error split
+nnoremap <Leader><Leader>l :lopen<CR>tocmd! BufWritePost * Neomake
+
+" some built in keybindings for included plugins
+"
+" matchit - <%> jums to other end of selected brackets
+" surround - <cs'"> - change ' to " around current selection
+" surround - <ds"> - remove " around current selection
+" surround - <yss[> - surounds current selection with [
+" textobj-rubyblock - var - selects outer ruby block
+"                     vir - selects inner ruby block
+"""""""""""""""""""""""""
+" Basic features
+"""""""""""""""""""""""""
+
+" Misc
+set secure
+set lazyredraw
 set splitbelow
 set splitright
+set diffopt+=vertical
+set shell=/bin/zsh
+scriptencoding utf-8
+set encoding=utf-8
+set termencoding=utf-8
+set clipboard=unnamed
+filetype plugin indent on " Do filetype detection and load custom file plugins and indent files
+set laststatus=2          " When you go into insert mode,
+                          " the status line color changes.
+                          " When you leave insert mode,
+                          " the status line color changes back.
 
-" move over screen lines not buffer lines
-"  helps with long wrapped lines (normal mode only)
-noremap k gk
-noremap j gj
+" Display options
+syntax on
+set pastetoggle=<F12>
+set nocursorline
+set number
+set list!                       " Display unprintable characters
+set listchars=tab:▸\ ,trail:•,extends:»,precedes:«
+autocmd filetype html,xml,go set listchars=tab:\│\ ,trail:-,extends:>,precedes:<,nbsp:+
+colorscheme gruvbox
+let g:gruvbox_contrast_dark = "medium" " soft, medium, hard
+let g:gruvbox_contrast_light = "medium"
+set background=dark
+set t_ut= " fixes transparent BG on tmux
 
-"" Git
-noremap <Leader>ga :Gwrite<CR>
-" Make the default commit binding be verbose
-noremap <Leader>gc :Gcommit -v<CR>
-noremap <Leader>gsh :Gpush<CR>
-noremap <Leader>gll :Gpull<CR>
-noremap <Leader>gs :Gstatus<CR>
-noremap <Leader>gb :Gblame<CR>
-noremap <Leader>gd :Gvdiff<CR>
-noremap <Leader>gr :Gremove<CR>
-" Remap hunk staging etc to not clash with split navigation's <leader>h
-nmap <leader>cs <Plug>GitGutterStageHunk
-nmap <leader>cp <Plug>GitGutterPreviewHunk
-nmap <leader>cr <Plug>GitGutterRevertHunk
+" Always edit file, even when swap file is found
+set shortmess+=A
+set hidden                         " Don't abandon buffers moved to the background
+set wildmenu                       " Enhanced completion hints in command line
+set backspace=eol,start,indent     " Allow backspacing over indent, eol, & start
+set complete=.,w,b,u,U,t,i,d       " Do lots of scanning on tab completion
+set directory=~/.config/nvim/swap  " Directory to use for the swap file
+set diffopt=filler,iwhite          " In diff mode, ignore whitespace changes and align unchanged lines
+set nowrap
+set visualbell
+set mouse=a
 
+" Relative line numbers
+set norelativenumber
+autocmd InsertLeave * :call NumberToggle()
+autocmd InsertEnter * :call NumberToggle()
 
-" " session management
-" TODO learn this shit
-" nnoremap <leader>so :OpenSession
-" nnoremap <leader>ss :SaveSession
-" nnoremap <leader>sd :DeleteSession<CR>
-" nnoremap <leader>sc :CloseSession<CR>
+" Indentation and tabbing
+set autoindent smartindent
+set smarttab                    " Make <tab> and <backspace> smarter
+set tabstop=2
+set expandtab
+set shiftround
+set shiftwidth=2
+set incsearch
+" viminfo: remember certain things when we exit
+" (http://vimdoc.sourceforge.net/htmldoc/usr_21.html)
+"   %    : saves and restores the buffer list
+"   '100 : marks will be remembered for up to 30 previously edited files
+"   /100 : save 100 lines from search history
+"   h    : disable hlsearch on start
+"   "500 : save up to 500 lines for each register
+"   :100 : up to 100 lines of command-line history will be remembered
+"   n... : where to save the viminfo files
+set viminfo=%100,'100,/100,h,\"500,:100,n~/.config/nvim/viminfo
 
-" Fix cursor position when using page up and down
-map <PageUp> <C-U>
-map <PageDown> <C-D>
-imap <PageUp> <C-O><C-U>
-imap <PageDown> <C-O><C-D>
-set nostartofline
-
-nmap <silent> <leader>z :set spell!<cr>
-
-nnoremap <silent> <leader><space> :noh<cr>
-
-" => to :, " to ' and add spaces
-function! PrettyHash()
-  :Bashrockets
-  :silent! s/\"\([a-zA-Z_]*\)\"\:/\1\:\ /g
-  :silent! s/\(\w\|\}\|\'\|\"\)\:\(\w\|{\|\'\|\"\)/\1\: \2/g
-  :silent! s/\"/\'/g
-  :silent! s/\(\w\|\}\|\'\|\"\),\(\w\)/\1, \2/g
-endfunction
-vnoremap <silent> <leader>h :call PrettyHash()<cr>
-
-function! SplitHash()
-  :silent! s/^\(\s\+\){\(.*\)/\1{\r\1\ \ \2/g
-  :silent! s/\(\w\|\}\|\'\|\"\|)\), \(\w\)/\1,\r\2/g
-  :silent! s/\}$/\r\}/g
-endfunction
-vnoremap <silent> <leader>j :call SplitHash()<cr>
-
-" Move line(s) of text using Alt+j/k
-nnoremap <silent> <A-j> :m+<CR>==
-nnoremap <silent> <A-k> :m-2<CR>==
-inoremap <silent> <A-j> <Esc>:m+<CR>==gi
-inoremap <silent> <A-k> <Esc>:m-2<CR>==gi
-vnoremap <silent> <A-j> :m'>+<CR>gv=gv
-vnoremap <silent> <A-k> :m-2<CR>gv=gv
-
-" move between several split windows
-" johaiidiii. Make backspace act like ctrl+h https://github.com/neovim/neovim/issues/2048#issuecomment-77010340
-" nmap <C-H> <C-W>h
-nmap <bs> <C-W>h
-nmap <C-J> <C-W>j
-nmap <C-K> <C-W>k
-nmap <C-L> <C-W>l
-tnoremap <C-h> <C-\><C-n><C-w>h
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
-
-" terminal shortcuts
-tnoremap <Esc> <C-\><C-n>
-tnoremap <C-w>_ <C-\><C-n><C-w>_
-tnoremap <C-u> <C-\><C-n><C-u>
-tnoremap <C-d> <C-\><C-n><C-d>
-
-" grep for the word under the cursor
-nnoremap <Leader>w :split <CR> :grep <cword> . <CR>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Tags
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:gutentags_project_root = ['package.json', 'Brocfile.js', 'Capfile', 'Rakefile', 'bower.json', '.ruby-version', 'Gemfile']
-
-augroup vimrc-go
-  autocmd!
-  " Fix vim-go leaving scratch buffers open
-  au CompleteDone * pclose
-  "" vim-go bindings
-  au FileType go nmap <Leader>gd <Plug>(go-doc)
-  au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
-  au FileType go nmap <Leader>gs <Plug>(go-implements)
-  au FileType go nmap <Leader>gi <Plug>(go-info)
-  au FileType go nmap <Leader>ge <Plug>(go-rename)
-
-  au FileType go setlocal tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
-augroup END
-
-
-let g:javascript_enable_domhtmlcss = 1
-
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_rails = 1
-
-augroup vimrc-ruby
-  autocmd!
-  autocmd BufNewFile,BufRead *.rb,*.rbw,*.gemspec setlocal filetype=ruby
-  autocmd FileType ruby setlocal tabstop=4 softtabstop=2 shiftwidth=2 expandtab
-augroup END
-
-"" Enable automatic word wrapping
-set formatoptions+=t
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Running tests
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Write the file and run tests for the given filename
-function! RunTests(filename)
-  :w
-  :tabnew
-  :call termopen([&sh, &shcf, "rspec " . a:filename], {'name':'running-tests'})
-  :startinsert
-endfunction
-
-"" Run tests in a neovim or tmux split
-nmap <silent> <leader>r :TestNearest<CR>
-nmap <silent> <leader>R :TestFile<CR>
-nmap <silent> <leader>ta :TestSuite<CR>
-nmap <silent> <leader>tl :TestLast<CR>
-nmap <silent> <leader>tg :TestVisit<CR>
-if has('nvim')
-  function! NeovimSplit(cmd)
-  :w
-  :split
-  :enew
-  :call termopen([&sh, &shcf, a:cmd])
-  :startinsert
-  endfunction
-
-  let g:test#custom_strategies = {'neovim_split': function('NeovimSplit')}
-  let g:test#strategy = 'neovim_split'
-  " Use <esc> to get to normal mode in the terminal split
-  tnoremap <esc> <C-\><C-n>
-else
-  let g:test#strategy = 'vimux'
+" Undo
+set undolevels=1000                     " How many undos
+set undoreload=10000                    " number of lines to save for undo
+if has("persistent_undo")
+  set undodir=~/.config/nvim/undo       " Allow undoes to persist even after a file is closed
+  set undofile
 endif
 
-" Highlight 121st column if text flows over it
-highlight ColorColumn ctermbg=red guibg=#ed2939
-call matchadd('ColorColumn', '\%121v', 100)
+" Search settings
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
+set showmatch
+
+" to_html settings
+let html_number_lines = 1
+let html_ignore_folding = 1
+let html_use_css = 1
+"let html_no_pre = 0
+let use_xhtml = 1
+let xml_use_xhtml = 1
+
+" Show a vertical line/guard at column 80
+let &colorcolumn=join(range(81,999),",")
+highlight ColorColumn ctermbg=235 guibg=#2c2d27
+let &colorcolumn="80,".join(range(131,999),",")
+
+" terminal colors
+let g:terminal_color_0  = '#2e3436'
+let g:terminal_color_1  = '#cc0000'
+let g:terminal_color_2  = '#4e9a06'
+let g:terminal_color_3  = '#c4a000'
+let g:terminal_color_4  = '#3465a4'
+let g:terminal_color_5  = '#75507b'
+let g:terminal_color_6  = '#0b939b'
+let g:terminal_color_7  = '#d3d7cf'
+let g:terminal_color_8  = '#555753'
+let g:terminal_color_9  = '#ef2929'
+let g:terminal_color_10 = '#8ae234'
+let g:terminal_color_11 = '#fce94f'
+let g:terminal_color_12 = '#729fcf'
+let g:terminal_color_13 = '#ad7fa8'
+let g:terminal_color_14 = '#00f5e9'
+let g:terminal_color_15 = '#eeeeec'
+
+"""""""""""""""""""""""""
+" Plugin's
+"""""""""""""""""""""""""
+" Fzf
+command! -bang -nargs=+ -complete=dir Ag call fzf#vim#ag_raw(<q-args>, <bang>0)
+command! -bang -nargs=* F
+  \ call fzf#vim#grep(
+  \   'rg --iglob !tags --sort path --column --line-number --no-heading --color=always --colors match:none --colors match:style:bold --colors=match:fg:208 --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+command! -bang -nargs=* Fr
+  \ call fzf#vim#grep(
+  \   'rg --type ruby --sort path --column --line-number --no-heading --color=always --colors match:none --colors match:style:bold --colors=match:fg:208 --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+" Use deoplete.
+" let g:deoplete#enable_at_startup = 1
+" call deoplete#custom#source('buffer', 'rank', 501)
+" call deoplete#custom#source('_', 'max_candidates', 5)
+" deoplete-go settings
+" let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+" let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+
+" use tab
+imap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ deoplete#mappings#manual_complete()
+function! s:check_back_space() abort "{{{
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction"}}}
+
+" For clang with
+let g:clang_complete_auto = 0
+let g:clang_auto_select = 0
+let g:clang_omnicppcomplete_compliance = 0
+let g:clang_make_default_keymappings = 0
+let g:clang_library_path = '/usr/local/opt/llvm/lib'
+
+" Ultisnip
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsSnippetsDir="~/.config/nvim/UltiSnips"
+
+
+" Notes
+let g:notes_directories = ['~/Dropbox/Notes']
+let g:notes_tab_indents = 0
+let g:notes_word_boundaries = 1
+
+" Lightline
+let g:lightline = {
+      \ 'colorscheme': 'gruvbox',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
+
+" Vim test
+let test#strategy = "neoterm"
+
+" Neomake
+" let g:neomake_verbose = 3
+let g:neomake_logfile = '/tmp/neomake.log'
+let g:neomake_ruby_reek_maker_errorformat =
+        \ '%E%.%#: Racc::ParseError: %f:%l :: %m,' .
+        \ '%W%f:%l: %m'
+let g:neomake_ruby_reek_maker = {
+    \ 'args': ['--single-line'],
+    \ 'errorformat': g:neomake_ruby_reek_maker_errorformat,
+    \ }
+let b:neomake_ruby_rubocop_exe = "~/.rvm/gems/ruby-2.4.0/bin/rubocop"
+let g:neomake_ruby_enabled_makers = ['mri', 'rubocop']
+let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_serialize = 1
+let g:neomake_serialize_abort_on_error = 1
+
+" Neoterm
+let g:neoterm_clear_cmd = "clear; printf '=%.0s' {1..80}; clear"
+let g:neoterm_run_tests_bg = 1
+let g:neoterm_raise_when_tests_fail = 1
+let g:neoterm_default_mod = 'botright'
+let g:neoterm_size = 10
+
+let g:neoterm_rspec_lib_cmd = 'bundle exec rspec'
+
+" JS libs
+let g:used_javascript_libs = 'jquery,handlebars,underscore,backbone'
+
+" ignored files
+set wildignore+=tags
+set wildignore+=*/tmp/*
+set wildignore+=*/spec/vcr/*
+set wildignore+=*/public/*
+set wildignore+=*/coverage/*
+set wildignore+=*.png,*.jpg,*.otf,*.woff,*.jpeg,*.orig
+
+" Markdown
+let g:vim_markdown_folding_disabled=1
+
+" EasyMotion
+" Use uppercase target labels and type as a lower case
+let g:EasyMotion_use_upper = 1
+" type `l` and match `l`&`L`
+let g:EasyMotion_smartcase = 1
+" Smartsign (type `3` and match `3`&`#`)
+let g:EasyMotion_use_smartsign_us = 1
+
+" ruby
+autocmd FileType ruby,eruby,yaml,haml setlocal iskeyword+=?
+autocmd FileType ruby,eruby,yaml,haml setlocal iskeyword+=!
+
+" omnifuncs
+set omnifunc=syntaxcomplete#Complete
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+
+" Markdown
+autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+
+" Handlebars/Mustache
+autocmd BufRead,BufNewFile *.hb.erb set filetype=mustache
+
+" Turn on spellcheck
+autocmd Filetype gitcommit,markdown,note setlocal spell textwidth=72
+autocmd Filetype gitcommit,markdown,note setlocal complete+=kspell
+
+" Crystal
+" ecr - like erb
+autocmd BufRead,BufNewFile *.ecr set filetype=.html.eruby
+
+" Golang
+au FileType go nmap <leader>R <Plug>(go-run)
+au FileType go nmap <leader>B <Plug>(go-build)
+au FileType go nmap <leader>T <Plug>(go-test)
+au FileType go nmap <leader>C <Plug>(go-coverage)
+
+"""""""""""""""""""""""""
+" Custom functions
+"""""""""""""""""""""""""
+
+"Toggle arrow keys
+
+function! RubocopAutoFix()
+  exe "w"
+  silent exe "!rvm ruby-2.4.0 do rubocop -a -R % &> /dev/null"
+  silent exe "e %"
+  silent exe "Neomake"
+endfun
+
+"This allows for change paste motion cp{motion}
+nmap <silent> cp :set opfunc=ChangePaste<CR>g@
+function! ChangePaste(type, ...)
+    silent exe "normal! `[v`]\"_c"
+    silent exe "normal! p"
+endfunction
+
+" When opening a file, always jump to the last cursor position
+autocmd BufReadPost *
+    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+    \     exe "normal g'\"" |
+    \ endif |
+
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set norelativenumber
+    set number
+  else
+    set relativenumber
+  endif
+endfunc
+
+function! ColorToggle()
+  if(&background == "dark")
+    set background=light
+  else
+    set background=dark
+  endif
+endfunction
+
+if $VIM_CRONTAB == "true"
+    set nobackup
+    set nowritebackup
+endif
